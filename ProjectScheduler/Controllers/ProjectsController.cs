@@ -20,14 +20,14 @@ namespace ProjectScheduler.Controllers
             var ResourceLst = new List<string>();
 
             var ResourceQry = from d in db.Projects
-                           orderby d.Resource
-                           select d.Resource;
+                              orderby d.Resource
+                              select d.Resource;
 
             ResourceLst.AddRange(ResourceQry.Distinct());
             ViewBag.projectResource = new SelectList(ResourceLst);
 
             var projects = from p in db.Projects
-                         select p;
+                           select p;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -58,6 +58,8 @@ namespace ProjectScheduler.Controllers
         }
 
         // GET: Projects/Create
+        //[Authorize(Roles = "derriford\\Systems")]
+        [Authorize(Users="derriford\\colliers")]
         public ActionResult Create()
         {
             return View();
@@ -68,7 +70,8 @@ namespace ProjectScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Title,StartDate,PM,Resource")] Project project)
+        [Authorize(Users = "derriford\\colliers")]
+        public ActionResult Create([Bind(Include = "ID,Title,StartDate,EndDate,PM,Resource,Notes")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -81,6 +84,7 @@ namespace ProjectScheduler.Controllers
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Users = "derriford\\colliers")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -98,13 +102,14 @@ namespace ProjectScheduler.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Users = "derriford\\colliers")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Title,StartDate,PM,Resource")] Project project)
+        public ActionResult Edit([Bind(Include = "ID,Title,StartDate,EndDate,PM,Resource,Notes")] Project project)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(project).State = EntityState.Modified;
+                db.Entry(project).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -112,6 +117,7 @@ namespace ProjectScheduler.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize(Users = "derriford\\colliers")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -127,6 +133,7 @@ namespace ProjectScheduler.Controllers
         }
 
         // POST: Projects/Delete/5
+        [Authorize(Users = "derriford\\colliers")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

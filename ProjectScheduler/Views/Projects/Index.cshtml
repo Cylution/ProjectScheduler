@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ProjectScheduler.Models.Project>
 
 @{
-    ViewBag.Title = "Projects";
+    ViewBag.Title = "Project Index";
 }
 
 <h2>Index</h2>
@@ -17,7 +17,7 @@
         <input type="submit" value="Filter" />
     </p>
     }
-
+ 
 <table class="table">
     <tr>
         <th>
@@ -27,10 +27,16 @@
             @Html.DisplayNameFor(model => model.StartDate)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.PM)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Resource)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
         </th>
         <th></th>
     </tr>
@@ -44,10 +50,16 @@
             @Html.DisplayFor(modelItem => item.StartDate)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.PM)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Resource)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
