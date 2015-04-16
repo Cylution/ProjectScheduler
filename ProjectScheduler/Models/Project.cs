@@ -11,11 +11,12 @@ namespace ProjectScheduler.Models
     {
         public int ID { get; set; }
 
-        [Required]
+        [Required(ErrorMessage="You must enter a {0}")]
+        [Display(Name = "Project Name")]
         public string Title { get; set; }
 
         [Display(Name = "Start Date")]
-        [Required]
+        //[Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:d}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
@@ -28,10 +29,10 @@ namespace ProjectScheduler.Models
         [Display(Name = "Project Manager")]        
         public string PM { get; set; }
         
-        [Required]
+        //[Required]
         public string Resource{ get; set; }
         
-        [StringLength(50, ErrorMessage = "Notes cannot be longer than 50 characters.")]
+        [StringLength(40, ErrorMessage = "Notes cannot be longer than 40 characters.")]
         public string Notes { get; set; }
 
     }

@@ -147,6 +147,18 @@
     <Compile Include="Migrations\201504140941005_AddNoteVal.Designer.cs">
       <DependentUpon>201504140941005_AddNoteVal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504150840270_testing.cs" />
+    <Compile Include="Migrations\201504150840270_testing.Designer.cs">
+      <DependentUpon>201504150840270_testing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504160833360_Format.cs" />
+    <Compile Include="Migrations\201504160833360_Format.Designer.cs">
+      <DependentUpon>201504160833360_Format.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504160836195_TitleChange.cs" />
+    <Compile Include="Migrations\201504160836195_TitleChange.Designer.cs">
+      <DependentUpon>201504160836195_TitleChange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -575,6 +587,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504140941005_AddNoteVal.resx">
       <DependentUpon>201504140941005_AddNoteVal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504150840270_testing.resx">
+      <DependentUpon>201504150840270_testing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504160833360_Format.resx">
+      <DependentUpon>201504160833360_Format.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504160836195_TitleChange.resx">
+      <DependentUpon>201504160836195_TitleChange.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -14,8 +14,9 @@ namespace ProjectScheduler.Controllers
     {
         private ProjectDBContext db = new ProjectDBContext();
 
+        
         // GET: Projects
-        public ActionResult Index(string projectResource, string searchString)
+        public ActionResult Index(string projectResource, string searchString, string searchFreeStartDate)
         {
             var ResourceLst = new List<string>();
 
@@ -26,20 +27,39 @@ namespace ProjectScheduler.Controllers
             ResourceLst.AddRange(ResourceQry.Distinct());
             ViewBag.projectResource = new SelectList(ResourceLst);
 
-            var projects = from p in db.Projects
+            var projs = from p in db.Projects
                            select p;
+
+            //sdate going to need to think about a range block where
+            //the ranges dont include search range.. maybe show a calendar
+            //with resource availability on those dates....
+            var StartDateQry = from d in db.Projects
+                               orderby d.StartDate
+                               where (d.StartDate.ToString() == searchFreeStartDate) 
+                               select d.StartDate;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                projects = projects.Where(s => s.Title.Contains(searchString));
+                projs = projs.Where(s => s.Title.Contains(searchString));
             }
 
             if (!string.IsNullOrEmpty(projectResource))
             {
-                projects = projects.Where(x => x.Resource == projectResource);
+                projs = projs.Where(x => x.Resource == projectResource);
             }
 
-            return View(projects);
+            if (!string.IsNullOrEmpty(StartDateQry.ToString()))
+            {
+       //         projs = projs.Where(x => x.StartDate == StartDateQry);
+            }
+
+
+            //rem date ranges searching
+            //will need to enter start date for a new project free resources
+
+
+
+            return View(projs);
         }
 
         // GET: Projects/Details/5
