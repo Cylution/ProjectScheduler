@@ -15,14 +15,14 @@ namespace ProjectScheduler.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Project Scheduler Description";
+            ViewBag.Message = "Project Scheduler version 0.0.1";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Contact";
+            ViewBag.Message = "Contact the Systems Team";
 
             return View();
         }
