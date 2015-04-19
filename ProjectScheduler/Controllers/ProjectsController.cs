@@ -79,7 +79,7 @@ namespace ProjectScheduler.Controllers
 
         // GET: Projects/Create
         //[Authorize(Roles = "derriford\\Systems")]
-        [Authorize(Users="derriford\\colliers")]
+        //[Authorize(Users="derriford\\colliers")]
         public ActionResult Create()
         {
             return View();
@@ -90,7 +90,7 @@ namespace ProjectScheduler.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Users = "derriford\\colliers")]
+        //[Authorize(Users = "derriford\\colliers")]
         public ActionResult Create([Bind(Include = "ID,Title,StartDate,EndDate,PM,Resource,Notes")] Project project)
         {
             if (ModelState.IsValid)
@@ -104,7 +104,7 @@ namespace ProjectScheduler.Controllers
         }
 
         // GET: Projects/Edit/5
-        [Authorize(Users = "derriford\\colliers")]
+        //[Authorize(Users = "derriford\\colliers")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -122,7 +122,7 @@ namespace ProjectScheduler.Controllers
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Users = "derriford\\colliers")]
+        //[Authorize(Users = "derriford\\colliers")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Title,StartDate,EndDate,PM,Resource,Notes")] Project project)
@@ -137,7 +137,7 @@ namespace ProjectScheduler.Controllers
         }
 
         // GET: Projects/Delete/5
-        [Authorize(Users = "derriford\\colliers")]
+        //[Authorize(Users = "derriford\\colliers")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -153,7 +153,7 @@ namespace ProjectScheduler.Controllers
         }
 
         // POST: Projects/Delete/5
-        [Authorize(Users = "derriford\\colliers")]
+        //[Authorize(Users = "derriford\\colliers")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
