@@ -32,7 +32,7 @@ namespace ProjectScheduler.Models
         //[Required]
         public string Resource{ get; set; }
         
-        [StringLength(40, ErrorMessage = "Notes cannot be longer than 40 characters.")]
+        [StringLength(400, ErrorMessage = "Notes cannot be longer than 400 characters.")]
         public string Notes { get; set; }
 
     }

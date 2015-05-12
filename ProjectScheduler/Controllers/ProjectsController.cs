@@ -13,11 +13,23 @@ namespace ProjectScheduler.Controllers
     public class ProjectsController : Controller
     {
         private ProjectDBContext db = new ProjectDBContext();
+        private DateTime searchStartDate;
 
-        
         // GET: Projects
-        public ActionResult Index(string projectResource, string searchString, string searchFreeStartDate)
+        public ActionResult Index(string projectResource, string searchString, string searchFreeStartDate, 
+            string sortOrder)
         {
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "resource_desc" : "";
+            ViewBag.StartDateSortParm = sortOrder == "startDate" ? "startDate_desc" : "startDate";
+            ViewBag.EndDateSortParm = sortOrder == "endDate" ? "endDate_desc" : "endDate";
+            ViewBag.TitleSortParam = sortOrder == "Title" ? "title_desc" : "Title";
+            ViewBag.PmSortParam = sortOrder == "pm" ? "pm_desc" : "pm";
+
+            if (!String.IsNullOrEmpty(searchFreeStartDate))
+            {
+                searchStartDate = Convert.ToDateTime(searchFreeStartDate);
+            }
+
             var ResourceLst = new List<string>();
 
             var ResourceQry = from d in db.Projects
@@ -28,14 +40,49 @@ namespace ProjectScheduler.Controllers
             ViewBag.projectResource = new SelectList(ResourceLst);
 
             var projs = from p in db.Projects
-                           select p;
+                        select p;
 
+            switch(sortOrder)
+            {
+                case "resource_desc":
+                    projs = projs.OrderByDescending(s => s.Resource);
+                    break;
+                case "startDate":
+                    projs = projs.OrderBy(s => s.StartDate);
+                    break;
+                case "startDate_desc":
+                    projs = projs.OrderByDescending(s => s.StartDate);
+                    break;
+                case "endDate":
+                    projs = projs.OrderBy(s => s.EndDate);
+                    break;
+                case "endDate_desc":
+                    projs = projs.OrderByDescending(s => s.EndDate);
+                    break;
+                case "pm":
+                    projs = projs.OrderBy(s => s.PM);
+                    break;
+                case "pm_desc":
+                    projs = projs.OrderByDescending(s => s.PM);
+                    break;
+                case "Title":
+                    projs = projs.OrderBy(s => s.Title);
+                    break;
+                case "title_desc":
+                    projs = projs.OrderByDescending(s => s.Title);
+                    break;
+                default:  // resource ascending 
+                    projs = projs.OrderBy(s => s.Resource);
+                    break;
+            }
             //sdate going to need to think about a range block where
             //the ranges dont include search range.. maybe show a calendar
-            //with resource availability on those dates....
+            //with resource availability on those dates.... implement icomparable and compareto obj dates
+            //DateTime.Parse(string)
+
             var StartDateQry = from d in db.Projects
                                orderby d.StartDate
-                               where (d.StartDate.ToString() == searchFreeStartDate) 
+                               where d.StartDate == searchStartDate
                                select d.StartDate;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -48,11 +95,16 @@ namespace ProjectScheduler.Controllers
                 projs = projs.Where(x => x.Resource == projectResource);
             }
 
-            if (!string.IsNullOrEmpty(StartDateQry.ToString()))
+            if (!string.IsNullOrEmpty(searchFreeStartDate))
             {
-       //         projs = projs.Where(x => x.StartDate == StartDateQry);
+
+                if (!string.IsNullOrEmpty(StartDateQry.ToString()))
+                {
+                       projs = projs.Where(x => x.StartDate == searchStartDate);
+                }
             }
 
+            if (!string.IsNullOrEmpty())
 
             //rem date ranges searching
             //will need to enter start date for a new project free resources

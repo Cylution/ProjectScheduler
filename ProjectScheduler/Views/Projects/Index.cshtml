@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ProjectScheduler.Models.Project>
+﻿<!-- strongly typed IEnumerable of type project-->
+@model IEnumerable<ProjectScheduler.Models.Project>
 
 @{
     ViewBag.Title = "Project Index";
@@ -11,35 +12,43 @@
 
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()    //rem these 2 in
+        @Html.ValidationSummary(true)
     <p>
         Resource: @Html.DropDownList("projectResource", "All")
-        Title: @Html.TextBox("SearchString") <br />
+        Title: @Html.TextBox("SearchString")
+
+        @*need to do datepicker*@
+        Start Date: @Html.TextBox("searchFreeStartDate")
+
+        <br />
+
+        @*rem need to do sorting on headers*@
         <input type="submit" value="Filter" />
+
     </p>
     }
  
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.ActionLink("Title", "Index", new { sortOrder = ViewBag.TitleSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.ActionLink("Start Date", "Index", new { sortOrder = ViewBag.StartDateSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.ActionLink("End Date", "Index", new { sortOrder = ViewBag.EndDateSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PM)
+            @Html.ActionLink("Project Manager", "Index", new { sortOrder = ViewBag.PmSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Resource)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Notes)
+            @Html.ActionLink("Resource", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th></th>
     </tr>
+
 
 @foreach (var item in Model) {
     <tr>
@@ -58,9 +67,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.Resource)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Notes)
-        </td>
+
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |
