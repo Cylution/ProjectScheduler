@@ -5,6 +5,8 @@
     ViewBag.Title = "Project Index";
 }
 
+<link type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <h2>Index</h2>
 
 <p>
@@ -15,20 +17,35 @@
         @Html.AntiForgeryToken()    //rem these 2 in
         @Html.ValidationSummary(true)
     <p>
-        Resource: @Html.DropDownList("projectResource", "All")
-        Title: @Html.TextBox("SearchString")
 
-        @*need to do datepicker*@
-        Start Date: @Html.TextBox("searchFreeStartDate")
-
+        Available Resources :Start Date: @Html.TextBox("searchFreeStartDate")
         <br />
-
-        @*rem need to do sorting on headers*@
+        @if (ViewBag.AvailableResources != null)
+        {
+            <table>
+                <tr>
+                    @foreach (var item in ViewBag.AvailableResources)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item)
+                        </td>
+                    }
+                </tr>
+            </table>
+        }
+        <br />
+        Project Title: @Html.TextBox("SearchString")
+        <br />
+        <br />
+        Resource: @Html.DropDownList("projectResource", "All")      
+        <br />
+        <br />
         <input type="submit" value="Filter" />
 
     </p>
     }
- 
+
+
 <table class="table">
     <tr>
         <th>
@@ -46,6 +63,9 @@
         <th>
             @Html.ActionLink("Resource", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
+        @*<th>
+            @Html.ActionLink("date", "Index", new { sortOrder = ViewBag.dateUsed })
+        </th>*@
         <th></th>
     </tr>
 
@@ -77,3 +97,10 @@
 }
 
 </table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#searchFreeStartDate").datepicker({ dateFormat: 'dd-mm-yy' });
+    })
+</script>
+

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProjectScheduler.Models;
+using System.Diagnostics;
 
 namespace ProjectScheduler.Controllers
 {
@@ -14,6 +15,7 @@ namespace ProjectScheduler.Controllers
     {
         private ProjectDBContext db = new ProjectDBContext();
         private DateTime searchStartDate;
+        
 
         // GET: Projects
         public ActionResult Index(string projectResource, string searchString, string searchFreeStartDate, 
@@ -24,6 +26,8 @@ namespace ProjectScheduler.Controllers
             ViewBag.EndDateSortParm = sortOrder == "endDate" ? "endDate_desc" : "endDate";
             ViewBag.TitleSortParam = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.PmSortParam = sortOrder == "pm" ? "pm_desc" : "pm";
+
+            
 
             if (!String.IsNullOrEmpty(searchFreeStartDate))
             {
@@ -38,6 +42,14 @@ namespace ProjectScheduler.Controllers
 
             ResourceLst.AddRange(ResourceQry.Distinct());
             ViewBag.projectResource = new SelectList(ResourceLst);
+            ViewBag.AvailableResources = "";
+
+            var ResourceNames = new List<string>();
+            foreach (string name in ResourceQry.Distinct())
+            {
+                ResourceNames.Add(name);
+            }
+            ViewBag.ResourceNames = ResourceNames;
 
             var projs = from p in db.Projects
                         select p;
@@ -78,7 +90,6 @@ namespace ProjectScheduler.Controllers
             //sdate going to need to think about a range block where
             //the ranges dont include search range.. maybe show a calendar
             //with resource availability on those dates.... implement icomparable and compareto obj dates
-            //DateTime.Parse(string)
 
             var StartDateQry = from d in db.Projects
                                orderby d.StartDate
@@ -97,18 +108,49 @@ namespace ProjectScheduler.Controllers
 
             if (!string.IsNullOrEmpty(searchFreeStartDate))
             {
-
+                
                 if (!string.IsNullOrEmpty(StartDateQry.ToString()))
                 {
-                       projs = projs.Where(x => x.StartDate == searchStartDate);
+                    DateTime dateQuery = Convert.ToDateTime(searchFreeStartDate);
+                    //want to do my linq to entities first as daterange cant be converted to sql obviously
+                    var ent = from d in db.Projects
+                        select d;
+                    //now work on the record, use asenumerable to make it linq to objects, get the data a return cprojs
+                    var cprojs = from p in ent.AsEnumerable().
+                                Where(x => DateRange.DateInRange(x.StartDate, x.EndDate, dateQuery))
+                            select p;
+
+                    //just looking for distinct resource names at the moment who are full.
+                    //need to get list of all names, do a compare and bring back free.
+                    //cprojs = cprojs.GroupBy(p => p.Resource).Select(g => g.First());
+                    List<string> fullList = new List<string>();
+                    List<string> availableResources = new List<string>();
+
+                    //this just brings back the names for all resources & populates fullList
+                    foreach (string r in ResourceNames)  
+                    {
+                        if (!availableResources.Contains(r))
+                        {
+                            availableResources.Add(r);
+                            availableResources.Add(" : ");
+                        }
+                    }
+
+                    //this brings back the names of resources used ie sam & eva and removes them from availableResources
+                    foreach (Project name in cprojs)  
+                    {
+                        if (availableResources.Contains(name.Resource))
+                        {
+                            availableResources.Remove(name.Resource);
+                            availableResources.Remove(" : ");
+                        }
+                    }
+                    ViewBag.AvailableResources = availableResources;
+
+                    //return our new view
+                    return View(cprojs);
                 }
             }
-
-            if (!string.IsNullOrEmpty())
-
-            //rem date ranges searching
-            //will need to enter start date for a new project free resources
-
 
 
             return View(projs);
