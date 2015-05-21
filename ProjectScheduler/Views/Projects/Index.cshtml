@@ -7,7 +7,7 @@
 
 <link type="text/css" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<h2>Index</h2>
+<h2>Current Projects</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -26,8 +26,11 @@
                 <tr>
                     @foreach (var item in ViewBag.AvailableResources)
                     {
-                        <td>
-                            @Html.DisplayFor(modelItem => item)
+                     <td>
+                            <b>
+                                 
+                                @Html.DisplayFor(modelItem => item) &nbsp;
+                            </b>
                         </td>
                     }
                 </tr>
@@ -100,7 +103,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#searchFreeStartDate").datepicker({ dateFormat: 'dd-mm-yy' });
+        $("#searchFreeStartDate").datepicker({numberOfMonths:2, dateFormat: 'dd-mm-yy' });
     })
 </script>
 

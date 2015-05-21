@@ -8,27 +8,27 @@ using System.Web;
 using System.Web.Mvc;
 using ProjectScheduler.Models;
 using System.Diagnostics;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProjectScheduler.Controllers
 {
     public class ProjectsController : Controller
     {
         private ProjectDBContext db = new ProjectDBContext();
-        private DateTime searchStartDate;
-        
+        private DateTime searchStartDate;       
 
         // GET: Projects
         public ActionResult Index(string projectResource, string searchString, string searchFreeStartDate, 
-            string sortOrder)
+            string sortOrder, int? page)
         {
+            const int pageSize = 10;
+
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "resource_desc" : "";
             ViewBag.StartDateSortParm = sortOrder == "startDate" ? "startDate_desc" : "startDate";
             ViewBag.EndDateSortParm = sortOrder == "endDate" ? "endDate_desc" : "endDate";
             ViewBag.TitleSortParam = sortOrder == "Title" ? "title_desc" : "Title";
             ViewBag.PmSortParam = sortOrder == "pm" ? "pm_desc" : "pm";
-
             
-
             if (!String.IsNullOrEmpty(searchFreeStartDate))
             {
                 searchStartDate = Convert.ToDateTime(searchFreeStartDate);
@@ -132,7 +132,7 @@ namespace ProjectScheduler.Controllers
                         if (!availableResources.Contains(r))
                         {
                             availableResources.Add(r);
-                            availableResources.Add(" : ");
+                            //availableResources.Add(" : ");
                         }
                     }
 
@@ -142,7 +142,7 @@ namespace ProjectScheduler.Controllers
                         if (availableResources.Contains(name.Resource))
                         {
                             availableResources.Remove(name.Resource);
-                            availableResources.Remove(" : ");
+                            //availableResources.Remove(":");
                         }
                     }
                     ViewBag.AvailableResources = availableResources;
@@ -151,8 +151,7 @@ namespace ProjectScheduler.Controllers
                     return View(cprojs);
                 }
             }
-
-
+            
             return View(projs);
         }
 

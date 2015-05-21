@@ -18,8 +18,8 @@ namespace ProjectScheduler.Models
     {
         public DateRange(DateTime start, DateTime end)
         {
-            Start = start;
-            End = end;
+            this.Start = start;
+            this.End = end;
         }
 
         public DateTime Start { get; private set; }
@@ -27,14 +27,14 @@ namespace ProjectScheduler.Models
 
         public bool Includes(DateTime value)
         {
-            return (Start <= value) && (value <= End);
+            return (this.Start <= value) && (value <= this.End);
         }
 
         public bool Includes(IRange<DateTime> range)
         {
-            return (Start <= range.Start) && (range.End <= End);
+            return (this.Start <= range.Start) && (range.End <= this.End);
         }
-        //combine for linq call
+        // combine for linq call
 
         public static bool DateInRange(DateTime start, DateTime end, DateTime query)
         {
